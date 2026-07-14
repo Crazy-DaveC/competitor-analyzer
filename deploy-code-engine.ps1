@@ -119,7 +119,8 @@ Write-Host "Step 6: Building image (3-5 minutes)..." -ForegroundColor Green
 ibmcloud ce buildrun submit --build $buildName --wait
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Build failed. Fetching logs..." -ForegroundColor Red
-    ibmcloud ce buildrun logs --build $buildName
+    $lastRun = ibmcloud ce buildrun list --output json 2>&1 | ConvertFrom-Json | Where-Object { $_.metadata.labels.'buildrun.serving.knative.dev/buildName' -eq $buildName -or $_.metadata.name -like "$buildName*" } | Select-Object -Last 1
+    if ($lastRun) { ibmcloud ce buildrun logs --buildrun $lastRun.metadata.name }
     Read-Host "Press Enter to exit"
     exit 1
 }
