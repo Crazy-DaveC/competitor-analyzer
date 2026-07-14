@@ -1,0 +1,15 @@
+---
+applications:
+- name: competitor-analyzer-ibm
+  memory: 512M
+  instances: 1
+  buildpacks:
+    - nodejs_buildpack
+  command: npm start
+  env:
+    NODE_ENV: production
+  services: []
+  routes:
+    - route: competitor-analyzer-ibm.mybluemix.net
+
+# Made with Bob

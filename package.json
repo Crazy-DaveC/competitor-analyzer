@@ -1,0 +1,40 @@
+{
+  "name": "competitor-message-analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "process-docs": "tsx scripts/process-documents.ts",
+    "test-llm": "tsx scripts/test-llm-connection.ts",
+    "test-vector": "tsx scripts/test-vector-db.ts",
+    "deploy:ibm": "ibmcloud cf push",
+    "logs:ibm": "ibmcloud cf logs competitor-analyzer-ibm --recent",
+    "logs:ibm:stream": "ibmcloud cf logs competitor-analyzer-ibm"
+  },
+  "dependencies": {
+    "@ibm-cloud/watsonx-ai": "^1.1.0",
+    "@pinecone-database/pinecone": "^2.0.0",
+    "ibm-cloud-sdk-core": "^5.4.20",
+    "jose": "^6.2.3",
+    "langchain": "^0.1.0",
+    "mammoth": "^1.6.0",
+    "next": "^14.2.35",
+    "openai": "^4.20.0",
+    "pdf-parse": "^1.1.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "xlsx": "^0.18.5",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/pdf-parse": "^1.1.4",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "tsx": "^4.22.3",
+    "typescript": "^5.3.0"
+  }
+}
