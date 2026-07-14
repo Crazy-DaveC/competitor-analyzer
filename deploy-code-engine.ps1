@@ -7,14 +7,15 @@ Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Config
-$projectName = "competitor-analyzer"
-$appName     = "competitor-analyzer"
-$buildName   = "competitor-analyzer-build"
-$namespace   = "ce--0d7a9-2bt5rda2txf2"
-$registry    = "us.icr.io"
-$imageFull   = "$registry/$namespace/competitor-analyzer-image:latest"
-$gitRepo     = "https://github.com/Crazy-DaveC/competitor-analyzer"
-$gitBranch   = "master"
+$projectName     = "competitor-analyzer"
+$appName         = "competitor-analyzer"
+$buildName       = "competitor-analyzer-build"
+$namespace       = "ce--0d7a9-2bt5rda2txf2"
+$registry        = "us.icr.io"
+$imageFull       = "$registry/$namespace/competitor-analyzer-image:latest"
+$gitRepo         = "https://github.com/Crazy-DaveC/competitor-analyzer"
+$gitBranch       = "master"
+$registrySecret  = "ce-auto-icr-private-us-south"
 
 # Ensure Git and GitHub CLI are on PATH
 $env:PATH = "C:\Program Files\Git\cmd;C:\Program Files\GitHub CLI;" + $env:PATH
@@ -98,10 +99,10 @@ $buildExists = ibmcloud ce build get --name $buildName 2>&1 | Select-String "Nam
 
 if ($buildExists) {
     Write-Host "  Updating existing build config..." -ForegroundColor Cyan
-    ibmcloud ce build update --name $buildName --image $imageFull --source $gitRepo --commit $gitBranch 2>&1 | Out-Null
+    ibmcloud ce build update --name $buildName --image $imageFull --source $gitRepo --commit $gitBranch --registry-secret $registrySecret 2>&1 | Out-Null
 } else {
     Write-Host "  Creating build config..." -ForegroundColor Cyan
-    ibmcloud ce build create --name $buildName --image $imageFull --source $gitRepo --commit $gitBranch --strategy dockerfile --size medium 2>&1
+    ibmcloud ce build create --name $buildName --image $imageFull --source $gitRepo --commit $gitBranch --strategy dockerfile --size medium --registry-secret $registrySecret 2>&1
 }
 
 if ($LASTEXITCODE -ne 0) {
