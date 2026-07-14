@@ -155,11 +155,13 @@ Write-Host "Step 8: Deploying to Code Engine..." -ForegroundColor Green
 $appExists = ibmcloud ce app get --name $appName 2>&1 | Select-String "Name:"
 
 if ($appExists) {
+    Write-Host "  Clearing any stale build association..." -ForegroundColor Cyan
+    ibmcloud ce app update --name $appName --build-clear 2>&1 | Out-Null
     Write-Host "  Updating existing app..." -ForegroundColor Cyan
-    ibmcloud ce app update --name $appName --image $imageFull @envArgs --wait
+    ibmcloud ce app update --name $appName --image $imageFull --registry-secret $registrySecret @envArgs --wait
 } else {
     Write-Host "  Creating new app..." -ForegroundColor Cyan
-    ibmcloud ce app create --name $appName --image $imageFull --port 3000 --min-scale 0 --max-scale 1 --cpu 0.25 --memory 0.5G @envArgs --wait
+    ibmcloud ce app create --name $appName --image $imageFull --registry-secret $registrySecret --port 3000 --min-scale 0 --max-scale 1 --cpu 0.25 --memory 0.5G @envArgs --wait
 }
 
 if ($LASTEXITCODE -ne 0) {
